@@ -41,7 +41,7 @@
     var longitude;
     var map;
     var infowindow;
-    var placesResults = [];
+    var markers = [];
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
       swal("Loading Map!", "Please hold while we retrive nearby restaurants!", {
@@ -265,13 +265,13 @@
       var service = new google.maps.places.PlacesService(map);
       service.nearbySearch({
         location: currentLocation,
-        radius: 1200,
+        radius: 2000,
         type: ['restaurant']
       }, callback);
       
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          placesResults.push(results)
+          markers.push(results)
           for (var i = 0; i < results.length; i++) {
             buildPlacesMenu(results[i]);
             createMarker(results[i]);
@@ -279,20 +279,6 @@
         }
       }
 
-      function createMarker(place) {
-        var placeLoc = place.geometry.location;
-        var marker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location,
-          animation: google.maps.Animation.DROP
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-          infowindow.setContent(place.name);
-          infowindow.open(map, this);
-        });
-      }
-      
       var element = document.createElement('ul');
       element.classList.add('list-group');
       function buildPlacesMenu(result) {
@@ -307,10 +293,49 @@
       sideMenu = document.getElementsByClassName('col-2')[0];
       sideMenu.appendChild(element);
     }
-    
-    function displayItem(place) {
-      
+    // Hides markers from map
+    function setMapOnAll(map) {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+      }
     }
+    // Display seletion with info window from sideMenu
+    function displayItem(result) {
+      var infoContent = `
+        <div id="content">\
+          <h6 class="mb-1">${result.name}</h6>
+          <p class="lead mb-0">${result.vicinity}</p>
+          <p class="lead mb-0">Ratings: ${result.rating}</p>
+          <p class="lead mb-0">Open Now: ${result.opening_hours.open_now? "Yes" : "No"}</p>
+          <img src="${result.icon}" class="detail-image mt-1">
+        </div>
+      `
+      var infowindow = new google.maps.InfoWindow({
+        content: infoContent
+      });
+      
+      var marker = new google.maps.Marker({
+          position: result.geometry.location,
+          map: map
+      });
+              
+      infowindow.open(map, marker)
+    }
+    //
+    function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location,
+        animation: google.maps.Animation.DROP
+      });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+      });
+    }
+    
   }
 </script>
 

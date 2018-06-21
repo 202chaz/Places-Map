@@ -10,6 +10,16 @@ h2 {
   font-weight:900;
 }
 
+h6 {
+  color:#2EC4B6;
+}
+.detail-image {
+  height:30px;
+  width:40px;
+}
+.lead {
+  font-size:11px;
+}
 .list-group-item {
   background:#2EC4B6;
   color:#FDFFFC;
