@@ -36,7 +36,7 @@ h6 {
   background:#2EC4B6;
   color:#FDFFFC;
 }
-.side-menu, col-2 {
+.side-menu, .col-2 {
   height:100vh;
   overflow-y: scroll;
 }
