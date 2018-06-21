@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,900');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h2 {
+  font-weight:900;
+}
+
+.list-group-item {
+  background:#2EC4B6;
+  color:#FDFFFC;
+  font-weight:900;
+}
+.list-group-item:hover {
+  background:#2EC4B6;
+  color:#011627;
+  font-weight:900;
+  transition-timing-function: ease-in;
+  transition: 0.5s;
+}
+.header-row {
+  background:#2EC4B6;
+  color:#FDFFFC;
+}
+.side-menu {
+  height:100vh;
+  overflow-y: scroll;
+}
+.my-menu {
+  height:100vh;
+  width:inherit;
+}
+
+li {
+  cursor:pointer;
+}

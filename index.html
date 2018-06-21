@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Places Demo</title>
+<title>Restaurant Locater</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="./css/main.css">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
-<body>
+<body class="container-fluid">
 
-<div id="map"></div>
-
+  <div class="row">
+    <div class="col-12 header-row">
+      <h2 class="text-center text-uppercase pt-4 pb-4">restaurant locater</h2>
+    </div>
+    <div class="col-2 p-0 side-menu">
+    </div>
+    <div class="col-10 my-menu p-0">
+      <div id="map"></div>
+    </div>
+  </div>
 <style>
   /* Always set the map height explicitly to define the size of the div
   * element that contains the map. */
@@ -32,10 +41,10 @@
     var longitude;
     var map;
     var infowindow;
-    
+    var placesResults = [];
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
-      swal("Loading Map!", "Please hold while we retrive your location!", {
+      swal("Loading Map!", "Please hold while we retrive nearby restaurants!", {
         buttons: [false],
       });
     } else {
@@ -58,23 +67,213 @@
       var currentLocation = {lat: latitude, lng: longitude};
       map = new google.maps.Map(document.getElementById('map'), {
         center: currentLocation,
-        zoom: 14
+        zoom: 14,
+        labelAnchor: new google.maps.Point(20, 0),
+        styles: [
+          {
+            "featureType": "all",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "hue": "#ffc700"
+              },
+              {
+                "saturation": "59"
+              }
+            ]
+          },
+          {
+            "featureType": "administrative",
+            "elementType": "all",
+            "stylers": [
+              {
+                "saturation": "-100"
+              }
+            ]
+          },
+          {
+            "featureType": "administrative.province",
+            "elementType": "all",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "landscape",
+            "elementType": "all",
+            "stylers": [
+              {
+                "saturation": -100
+              },
+              {
+                "lightness": 65
+              },
+              {
+                "visibility": "on"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "all",
+            "stylers": [
+              {
+                "saturation": -100
+              },
+              {
+                "lightness": "50"
+              },
+              {
+                "visibility": "simplified"
+              }
+            ]
+          },
+          {
+            "featureType": "poi",
+            "elementType": "labels.icon",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "elementType": "all",
+            "stylers": [
+              {
+                "saturation": "-100"
+              }
+            ]
+          },
+          {
+            "featureType": "road.highway",
+            "elementType": "all",
+            "stylers": [
+              {
+                "visibility": "simplified"
+              }
+            ]
+          },
+          {
+            "featureType": "road.arterial",
+            "elementType": "all",
+            "stylers": [
+              {
+                "lightness": "30"
+              }
+            ]
+          },
+          {
+            "featureType": "road.local",
+            "elementType": "all",
+            "stylers": [
+              {
+                "lightness": "40"
+              }
+            ]
+          },
+          {
+            "featureType": "transit",
+            "elementType": "all",
+            "stylers": [
+              {
+                "saturation": -100
+              },
+              {
+                "visibility": "on"
+              }
+            ]
+          },
+          {
+            "featureType": "transit.line",
+            "elementType": "all",
+            "stylers": [
+              {
+                "visibility": "on"
+              },
+              {
+                "lightness": "44"
+              }
+            ]
+          },
+          {
+            "featureType": "transit.station.rail",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "visibility": "off"
+              },
+              {
+                "hue": "#efff00"
+              },
+              {
+                "saturation": "44"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+              {
+                "hue": "#ffff00"
+              },
+              {
+                "lightness": -25
+              },
+              {
+                "saturation": -97
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "geometry.fill",
+            "stylers": [
+              {
+                "saturation": "25"
+              },
+              {
+                "lightness": "45"
+              },
+              {
+                "color": "#82C6EE"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "elementType": "labels",
+            "stylers": [
+              {
+                "lightness": -25
+              },
+              {
+                "saturation": -100
+              }
+            ]
+          }
+        ]
       });
       // The marker, positioned at Uluru
-      var marker = new google.maps.Marker({position: currentLocation, map: map});
+      var marker = new google.maps.Marker({position: currentLocation, map: map, icon: 'http://maps.google.com/mapfiles/ms/icons/arrow.png', animation: google.maps.Animation.DROP});
       
       infowindow = new google.maps.InfoWindow();
       var service = new google.maps.places.PlacesService(map);
       service.nearbySearch({
         location: currentLocation,
-        radius: 900,
+        radius: 1200,
         type: ['restaurant']
       }, callback);
       
       function callback(results, status) {
-        console.log(results,status)
         if (status === google.maps.places.PlacesServiceStatus.OK) {
+          placesResults.push(results)
           for (var i = 0; i < results.length; i++) {
+            buildPlacesMenu(results[i]);
             createMarker(results[i]);
           }
         }
@@ -84,7 +283,8 @@
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
           map: map,
-          position: place.geometry.location
+          position: place.geometry.location,
+          animation: google.maps.Animation.DROP
         });
 
         google.maps.event.addListener(marker, 'click', function() {
@@ -92,7 +292,24 @@
           infowindow.open(map, this);
         });
       }
-            
+      
+      var element = document.createElement('ul');
+      element.classList.add('list-group');
+      function buildPlacesMenu(result) {
+        var item = document.createElement('li');
+        item.classList.add('list-group-item','list-group-item-action');
+        item.addEventListener("click", function() {
+         displayItem(result)
+        });
+        item.innerHTML = result.name;
+        element.appendChild(item)
+      }
+      sideMenu = document.getElementsByClassName('col-2')[0];
+      sideMenu.appendChild(element);
+    }
+    
+    function displayItem(place) {
+      
     }
   }
 </script>
