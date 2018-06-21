@@ -13,7 +13,8 @@
 
   <div class="row">
     <div class="col-12 header-row">
-      <h2 class="text-center text-uppercase pt-4 pb-4">restaurant locater</h2>
+      <h2 class="text-center text-uppercase pt-4 pb-1">restaurant locater</h2>
+      <p id="item-count" class="pl-2 text-center"></p>
     </div>
     <div class="col-2 p-0 side-menu">
     </div>
@@ -42,6 +43,8 @@
     var map;
     var infowindow;
     var markers = [];
+    var countDisplay = document.getElementById('item-count');
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
       swal("Loading Map!", "Please hold while we retrive nearby restaurants!", {
@@ -271,6 +274,7 @@
       
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
+          countDisplay.innerHTML = `Showing ${results.length} items`;
           markers.push(results)
           for (var i = 0; i < results.length; i++) {
             buildPlacesMenu(results[i]);
