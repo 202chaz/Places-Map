@@ -13,6 +13,9 @@ h2 {
 h6 {
   color:#2EC4B6;
 }
+.col-2 {
+  background:#2EC4B6;
+}
 .detail-image {
   height:30px;
   width:40px;
@@ -36,7 +39,7 @@ h6 {
   background:#2EC4B6;
   color:#FDFFFC;
 }
-.side-menu, .col-2 {
+.side-menu {
   height:100vh;
   overflow-y: scroll;
 }
