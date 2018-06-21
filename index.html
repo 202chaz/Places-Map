@@ -274,7 +274,7 @@
       
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          countDisplay.innerHTML = `Showing ${results.length} items`;
+          countDisplay.innerHTML = `Showing ${results.length} restaurants within 2000 meters of location`;
           markers.push(results)
           for (var i = 0; i < results.length; i++) {
             buildPlacesMenu(results[i]);
